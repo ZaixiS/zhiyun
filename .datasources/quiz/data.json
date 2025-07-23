@@ -3,12 +3,14 @@
   {
     "_id": "quiz_001",
     "userId": "user_002",
+    "title": "基础数学测验",
     "quizType": "math",
     "score": 80,
     "totalQuestions": 5,
     "correctCount": 4,
     "questions": [
       {
+        "id": 1,
         "question": "5 + 7 = ?",
         "options": ["10", "11", "12", "13"],
         "answer": "12",
@@ -16,6 +18,7 @@
         "isCorrect": true
       },
       {
+        "id": 2,
         "question": "8 × 6 = ?",
         "options": ["42", "48", "54", "56"],
         "answer": "48",
@@ -23,6 +26,7 @@
         "isCorrect": true
       },
       {
+        "id": 3,
         "question": "15 - 9 = ?",
         "options": ["4", "5", "6", "7"],
         "answer": "6",
@@ -30,6 +34,7 @@
         "isCorrect": false
       },
       {
+        "id": 4,
         "question": "36 ÷ 6 = ?",
         "options": ["5", "6", "7", "8"],
         "answer": "6",
@@ -37,6 +42,7 @@
         "isCorrect": true
       },
       {
+        "id": 5,
         "question": "9 + 8 = ?",
         "options": ["15", "16", "17", "18"],
         "answer": "17",
@@ -50,12 +56,14 @@
   {
     "_id": "quiz_002",
     "userId": "user_003",
+    "title": "简单加法测验",
     "quizType": "math",
     "score": 100,
     "totalQuestions": 3,
     "correctCount": 3,
     "questions": [
       {
+        "id": 1,
         "question": "12 + 15 = ?",
         "options": ["25", "26", "27", "28"],
         "answer": "27",
@@ -63,6 +71,7 @@
         "isCorrect": true
       },
       {
+        "id": 2,
         "question": "7 × 8 = ?",
         "options": ["54", "56", "58", "60"],
         "answer": "56",
@@ -70,6 +79,7 @@
         "isCorrect": true
       },
       {
+        "id": 3,
         "question": "45 ÷ 9 = ?",
         "options": ["4", "5", "6", "7"],
         "answer": "5",
@@ -83,12 +93,14 @@
   {
     "_id": "quiz_003",
     "userId": "user_004",
+    "title": "混合运算测验",
     "quizType": "math",
     "score": 60,
     "totalQuestions": 5,
     "correctCount": 3,
     "questions": [
       {
+        "id": 1,
         "question": "20 - 12 = ?",
         "options": ["6", "7", "8", "9"],
         "answer": "8",
@@ -96,6 +108,7 @@
         "isCorrect": true
       },
       {
+        "id": 2,
         "question": "6 × 9 = ?",
         "options": ["52", "53", "54", "55"],
         "answer": "54",
@@ -103,6 +116,7 @@
         "isCorrect": false
       },
       {
+        "id": 3,
         "question": "18 + 24 = ?",
         "options": ["40", "41", "42", "43"],
         "answer": "42",
@@ -110,6 +124,7 @@
         "isCorrect": true
       },
       {
+        "id": 4,
         "question": "72 ÷ 8 = ?",
         "options": ["8", "9", "10", "11"],
         "answer": "9",
@@ -117,6 +132,7 @@
         "isCorrect": false
       },
       {
+        "id": 5,
         "question": "14 + 16 = ?",
         "options": ["28", "29", "30", "31"],
         "answer": "30",
@@ -130,12 +146,14 @@
   {
     "_id": "quiz_004",
     "userId": "user_005",
+    "title": "进阶数学测验",
     "quizType": "math",
     "score": 75,
     "totalQuestions": 4,
     "correctCount": 3,
     "questions": [
       {
+        "id": 1,
         "question": "25 + 17 = ?",
         "options": ["40", "41", "42", "43"],
         "answer": "42",
@@ -143,6 +161,7 @@
         "isCorrect": true
       },
       {
+        "id": 2,
         "question": "8 × 7 = ?",
         "options": ["54", "55", "56", "57"],
         "answer": "56",
@@ -150,6 +169,7 @@
         "isCorrect": true
       },
       {
+        "id": 3,
         "question": "63 ÷ 7 = ?",
         "options": ["8", "9", "10", "11"],
         "answer": "9",
@@ -157,6 +177,7 @@
         "isCorrect": true
       },
       {
+        "id": 4,
         "question": "35 - 18 = ?",
         "options": ["15", "16", "17", "18"],
         "answer": "17",
@@ -170,12 +191,14 @@
   {
     "_id": "quiz_005",
     "userId": "user_002",
+    "title": "综合数学测验",
     "quizType": "math",
     "score": 90,
     "totalQuestions": 10,
     "correctCount": 9,
     "questions": [
       {
+        "id": 1,
         "question": "2 + 3 = ?",
         "options": ["4", "5", "6", "7"],
         "answer": "5",
@@ -183,6 +206,7 @@
         "isCorrect": true
       },
       {
+        "id": 2,
         "question": "7 × 6 = ?",
         "options": ["40", "41", "42", "43"],
         "answer": "42",
@@ -190,6 +214,7 @@
         "isCorrect": true
       },
       {
+        "id": 3,
         "question": "15 - 8 = ?",
         "options": ["6", "7", "8", "9"],
         "answer": "7",
@@ -197,6 +222,7 @@
         "isCorrect": true
       },
       {
+        "id": 4,
         "question": "24 ÷ 4 = ?",
         "options": ["5", "6", "7", "8"],
         "answer": "6",
@@ -204,6 +230,7 @@
         "isCorrect": true
       },
       {
+        "id": 5,
         "question": "9 + 12 = ?",
         "options": ["19", "20", "21", "22"],
         "answer": "21",
@@ -211,6 +238,7 @@
         "isCorrect": true
       },
       {
+        "id": 6,
         "question": "8 × 9 = ?",
         "options": ["70", "71", "72", "73"],
         "answer": "72",
@@ -218,6 +246,7 @@
         "isCorrect": true
       },
       {
+        "id": 7,
         "question": "36 - 19 = ?",
         "options": ["15", "16", "17", "18"],
         "answer": "17",
@@ -225,6 +254,7 @@
         "isCorrect": true
       },
       {
+        "id": 8,
         "question": "48 ÷ 6 = ?",
         "options": ["7", "8", "9", "10"],
         "answer": "8",
@@ -232,6 +262,7 @@
         "isCorrect": true
       },
       {
+        "id": 9,
         "question": "13 + 28 = ?",
         "options": ["39", "40", "41", "42"],
         "answer": "41",
@@ -239,6 +270,7 @@
         "isCorrect": true
       },
       {
+        "id": 10,
         "question": "7 × 8 = ?",
         "options": ["54", "55", "56", "57"],
         "answer": "56",

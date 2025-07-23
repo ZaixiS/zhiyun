@@ -9,6 +9,11 @@
       "type": "String"
     },
     {
+      "name": "title",
+      "title": "测验标题",
+      "type": "String"
+    },
+    {
       "name": "questions",
       "title": "题目列表",
       "type": "Array",
