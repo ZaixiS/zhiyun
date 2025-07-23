@@ -79,13 +79,14 @@ export default function LoginPage(props) {
       if (response.records && response.records.length > 0) {
         const user = response.records[0];
 
-        // 更新最后登录时间
+        // 更新最后登录时间 - 使用时间戳格式
         await $w.cloud.callDataSource({
           dataSourceName: 'user',
           methodName: 'wedaUpdateV2',
           params: {
             data: {
-              lastLoginAt: new Date().toISOString(),
+              lastLoginAt: Date.now(),
+              // 使用毫秒时间戳
               loginCount: (user.loginCount || 0) + 1
             },
             filter: {
@@ -182,7 +183,7 @@ export default function LoginPage(props) {
         return;
       }
 
-      // 创建新用户 - 使用数据模型中定义的所有字段
+      // 创建新用户 - 使用毫秒时间戳格式
       const response = await $w.cloud.callDataSource({
         dataSourceName: 'user',
         methodName: 'wedaCreateV2',
@@ -197,8 +198,8 @@ export default function LoginPage(props) {
             loginCount: 0,
             isEmailVerified: false,
             isPhoneVerified: false,
-            createdAt: new Date().toISOString(),
-            lastLoginAt: null
+            lastLoginAt: null,
+            createdAt: Date.now() // 使用毫秒时间戳
           }
         }
       });
