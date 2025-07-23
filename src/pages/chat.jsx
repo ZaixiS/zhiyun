@@ -39,7 +39,10 @@ export default function ChatPage(props) {
   const loadConversations = async () => {
     try {
       const user = localStorage.getItem('user');
-      if (!user) return;
+      if (!user) {
+        console.error('用户未登录');
+        return;
+      }
       const userData = JSON.parse(user);
       const response = await $w.cloud.callDataSource({
         dataSourceName: 'conversation',
@@ -75,7 +78,10 @@ export default function ChatPage(props) {
   const createNewConversation = async () => {
     try {
       const user = localStorage.getItem('user');
-      if (!user) return;
+      if (!user) {
+        console.error('用户未登录');
+        return;
+      }
       const userData = JSON.parse(user);
       const response = await $w.cloud.callDataSource({
         dataSourceName: 'conversation',
@@ -85,7 +91,8 @@ export default function ChatPage(props) {
             userId: userData.id,
             title: '新对话',
             messages: [],
-            lastMessage: ''
+            lastMessage: '',
+            createdAt: Date.now()
           }
         }
       });
@@ -123,7 +130,10 @@ export default function ChatPage(props) {
     }
   };
   const sendMessage = async () => {
-    if (!inputMessage.trim() || !currentConversationId) return;
+    if (!inputMessage.trim() || !currentConversationId) {
+      console.error('消息或对话ID为空');
+      return;
+    }
     const userMessage = {
       id: Date.now().toString(),
       role: 'user',
@@ -135,7 +145,7 @@ export default function ChatPage(props) {
     setInputMessage('');
     setIsLoading(true);
     try {
-      // 更新对话消息
+      // 先更新对话消息
       await $w.cloud.callDataSource({
         dataSourceName: 'conversation',
         methodName: 'wedaUpdateV2',
@@ -154,7 +164,7 @@ export default function ChatPage(props) {
         }
       });
 
-      // 调用DeepSeek API获取回复
+      // 调用云函数获取AI回复
       const aiReply = await callDeepSeekAPI(inputMessage, newMessages);
       const aiMessage = {
         id: (Date.now() + 1).toString(),
@@ -187,7 +197,6 @@ export default function ChatPage(props) {
       });
     } catch (error) {
       console.error('发送消息失败:', error);
-      // 添加错误提示消息
       const errorMessage = {
         id: (Date.now() + 1).toString(),
         role: 'assistant',
@@ -211,6 +220,7 @@ export default function ChatPage(props) {
       const response = await $w.cloud.callFunction({
         name: 'deepseek-ai-chat',
         data: {
+          message: message,
           messages: [...messages, {
             role: 'user',
             content: message
@@ -221,10 +231,12 @@ export default function ChatPage(props) {
           stream: false
         }
       });
-      if (response.result && response.result.choices && response.result.choices[0]) {
-        return response.result.choices[0].message.content;
+      console.log('DeepSeek API响应:', response);
+      if (response.result && response.result.success) {
+        return response.result.reply || '抱歉，AI没有返回有效回复';
       } else {
-        throw new Error('API响应格式错误');
+        console.error('API调用失败:', response.result?.error || '未知错误');
+        return response.result?.error || '抱歉，AI服务暂时不可用';
       }
     } catch (error) {
       console.error('DeepSeek API调用失败:', error);
