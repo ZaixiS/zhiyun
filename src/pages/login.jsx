@@ -86,7 +86,6 @@ export default function LoginPage(props) {
           params: {
             data: {
               lastLoginAt: Date.now(),
-              // 使用毫秒时间戳
               loginCount: (user.loginCount || 0) + 1
             },
             filter: {
@@ -199,7 +198,7 @@ export default function LoginPage(props) {
             isEmailVerified: false,
             isPhoneVerified: false,
             lastLoginAt: null,
-            createdAt: Date.now() // 使用毫秒时间戳
+            createdAt: Date.now()
           }
         }
       });
