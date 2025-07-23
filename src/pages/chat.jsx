@@ -123,10 +123,21 @@ export default function ChatPage(props) {
         }
       });
       if (response) {
-        setMessages(response.messages || []);
+        // 确保 messages 是对象数组格式
+        const loadedMessages = response.messages || [];
+        if (typeof loadedMessages === 'string') {
+          try {
+            setMessages(JSON.parse(loadedMessages));
+          } catch {
+            setMessages([]);
+          }
+        } else {
+          setMessages(loadedMessages);
+        }
       }
     } catch (error) {
       console.error('加载消息失败:', error);
+      setMessages([]);
     }
   };
   const sendMessage = async () => {
@@ -134,6 +145,8 @@ export default function ChatPage(props) {
       console.error('消息或对话ID为空');
       return;
     }
+
+    // 创建新的消息对象
     const userMessage = {
       id: Date.now().toString(),
       role: 'user',
@@ -145,7 +158,7 @@ export default function ChatPage(props) {
     setInputMessage('');
     setIsLoading(true);
     try {
-      // 先更新对话消息
+      // 更新对话消息 - 确保 messages 是对象数组格式
       await $w.cloud.callDataSource({
         dataSourceName: 'conversation',
         methodName: 'wedaUpdateV2',
@@ -210,7 +223,7 @@ export default function ChatPage(props) {
   };
   const callDeepSeekAPI = async (message, conversationHistory) => {
     try {
-      // 构建对话上下文
+      // 构建对话上下文 - 确保传入的是对象数组
       const messages = conversationHistory.map(msg => ({
         role: msg.role,
         content: msg.content
