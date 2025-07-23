@@ -24,9 +24,40 @@
       "type": "Email"
     },
     {
+      "name": "phone",
+      "title": "手机号",
+      "type": "String"
+    },
+    {
       "name": "avatar",
       "title": "头像",
       "type": "Image"
+    },
+    {
+      "name": "status",
+      "title": "用户状态",
+      "type": "String"
+    },
+    {
+      "name": "lastLoginAt",
+      "title": "最后登录时间",
+      "type": "DateTime",
+      "format": "timestamp-ms"
+    },
+    {
+      "name": "loginCount",
+      "title": "登录次数",
+      "type": "Number"
+    },
+    {
+      "name": "isEmailVerified",
+      "title": "邮箱已验证",
+      "type": "Boolean"
+    },
+    {
+      "name": "isPhoneVerified",
+      "title": "手机已验证",
+      "type": "Boolean"
     }
   ]
 }

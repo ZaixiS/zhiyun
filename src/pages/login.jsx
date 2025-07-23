@@ -52,7 +52,7 @@ export default function LoginPage(props) {
         return;
       }
 
-      // 查询用户
+      // 查询用户 - 使用正确的字段名
       const response = await $w.cloud.callDataSource({
         dataSourceName: 'user',
         methodName: 'wedaGetRecordsV2',
@@ -61,7 +61,7 @@ export default function LoginPage(props) {
             where: {
               $and: [{
                 username: {
-                  $eq: username
+                  $eq: username.trim()
                 }
               }, {
                 password: {
@@ -78,13 +78,33 @@ export default function LoginPage(props) {
       });
       if (response.records && response.records.length > 0) {
         const user = response.records[0];
-        // 保存用户信息
+
+        // 更新最后登录时间
+        await $w.cloud.callDataSource({
+          dataSourceName: 'user',
+          methodName: 'wedaUpdateV2',
+          params: {
+            data: {
+              lastLoginAt: new Date().toISOString(),
+              loginCount: (user.loginCount || 0) + 1
+            },
+            filter: {
+              where: {
+                _id: {
+                  $eq: user._id
+                }
+              }
+            }
+          }
+        });
+
+        // 保存用户信息到本地存储
         localStorage.setItem('user', JSON.stringify({
           id: user._id,
           username: user.username,
           email: user.email,
           avatar: user.avatar || `https://images.unsplash.com/photo-${Math.floor(Math.random() * 1000)}?w=100&h=100&fit=crop&crop=face`,
-          role: user.role,
+          role: user.role || 'user',
           loginTime: new Date().toISOString()
         }));
         setSuccess('登录成功！正在跳转...');
@@ -112,6 +132,10 @@ export default function LoginPage(props) {
     // 表单验证
     if (!username || !password || !confirmPassword) {
       setError('请填写所有必填字段');
+      return;
+    }
+    if (username.trim().length < 3) {
+      setError('用户名至少3个字符');
       return;
     }
     if (password.length < 6) {
@@ -142,7 +166,7 @@ export default function LoginPage(props) {
           filter: {
             where: {
               username: {
-                $eq: username
+                $eq: username.trim()
               }
             }
           },
@@ -158,7 +182,7 @@ export default function LoginPage(props) {
         return;
       }
 
-      // 创建新用户
+      // 创建新用户 - 使用数据模型中定义的所有字段
       const response = await $w.cloud.callDataSource({
         dataSourceName: 'user',
         methodName: 'wedaCreateV2',
@@ -168,7 +192,13 @@ export default function LoginPage(props) {
             password: password,
             role: 'user',
             email: `${username.trim()}@example.com`,
-            avatar: `https://images.unsplash.com/photo-${Math.floor(Math.random() * 1000)}?w=100&h=100&fit=crop&crop=face`
+            avatar: `https://images.unsplash.com/photo-${Math.floor(Math.random() * 1000)}?w=100&h=100&fit=crop&crop=face`,
+            status: 'active',
+            loginCount: 0,
+            isEmailVerified: false,
+            isPhoneVerified: false,
+            createdAt: new Date().toISOString(),
+            lastLoginAt: null
           }
         }
       });
