@@ -1,0 +1,41 @@
+
+{
+  "name": "quiz",
+  "title": "测验记录",
+  "schemas": [
+    {
+      "name": "userId",
+      "title": "用户ID",
+      "type": "String"
+    },
+    {
+      "name": "questions",
+      "title": "题目列表",
+      "type": "Array",
+      "items": {
+        "type": "Object"
+      }
+    },
+    {
+      "name": "score",
+      "title": "得分",
+      "type": "Number"
+    },
+    {
+      "name": "totalQuestions",
+      "title": "总题数",
+      "type": "Number"
+    },
+    {
+      "name": "correctCount",
+      "title": "正确题数",
+      "type": "Number"
+    },
+    {
+      "name": "quizType",
+      "title": "测验类型",
+      "type": "String"
+    }
+  ]
+}
+  

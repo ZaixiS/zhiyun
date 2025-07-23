@@ -1,0 +1,235 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>答题中 - QuizMaster</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: #000000;
+    }
+    .option-card {
+      background: #1C1C1E;
+      border: 2px solid transparent;
+      transition: all 0.3s ease;
+    }
+    .option-card:hover {
+      border-color: #0A84FF;
+      background: #2C2C2E;
+    }
+    .option-card.selected {
+      border-color: #0A84FF;
+      background: rgba(10, 132, 255, 0.1);
+    }
+    .option-card.correct {
+      border-color: #30D158;
+      background: rgba(48, 209, 88, 0.1);
+    }
+    .option-card.incorrect {
+      border-color: #FF453A;
+      background: rgba(255, 69, 58, 0.1);
+    }
+    .progress-bar {
+      background: #2C2C2E;
+      height: 8px;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      background: linear-gradient(90deg, #0A84FF, #5E5CE6);
+      height: 100%;
+      transition: width 0.5s ease;
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-black">
+  <div class="max-w-md mx-auto px-4 py-8">
+    <!-- Header -->
+    <header class="flex items-center justify-between mb-6">
+      <button onclick="window.location.href='index.html'" class="text-gray-400 hover:text-white transition">
+        <i class="fas fa-arrow-left text-xl"></i>
+      </button>
+      <div class="text-center">
+        <p class="text-gray-400 text-sm">题目 <span id="currentQuestion">1</span> / <span id="totalQuestions">10</span></p>
+      </div>
+      <div class="w-8"></div>
+    </header>
+
+    <!-- Progress Bar -->
+    <div class="progress-bar mb-8">
+      <div class="progress-fill" id="progressFill" style="width: 10%"></div>
+    </div>
+
+    <!-- Question Card -->
+    <div class="bg-gray-900 rounded-2xl p-6 mb-6">
+      <h2 class="text-xl font-semibold text-white mb-4" id="questionText">
+        2 + 2 等于多少？
+      </h2>
+      <div class="text-gray-400 text-sm">
+        <i class="fas fa-clock mr-1"></i>
+        <span id="timer">00:30</span>
+      </div>
+    </div>
+
+    <!-- Options -->
+    <div class="space-y-3" id="optionsContainer">
+      <div class="option-card rounded-xl p-4 cursor-pointer" onclick="selectOption(0)">
+        <span class="text-white">A. 3</span>
+      </div>
+      <div class="option-card rounded-xl p-4 cursor-pointer" onclick="selectOption(1)">
+        <span class="text-white">B. 4</span>
+      </div>
+      <div class="option-card rounded-xl p-4 cursor-pointer" onclick="selectOption(2)">
+        <span class="text-white">C. 5</span>
+      </div>
+      <div class="option-card rounded-xl p-4 cursor-pointer" onclick="selectOption(3)">
+        <span class="text-white">D. 6</span>
+      </div>
+    </div>
+
+    <!-- Action Button -->
+    <button id="nextBtn" class="w-full mt-8 bg-gray-700 text-gray-400 rounded-xl py-4 font-semibold transition" disabled>
+      请选择答案
+    </button>
+  </div>
+
+  <script>
+    // Quiz data
+    const quizData = {
+      math: [
+        {
+          question: "2 + 2 等于多少？",
+          options: ["3", "4", "5", "6"],
+          correct: 1
+        },
+        {
+          question: "5 × 7 等于多少？",
+          options: ["30", "35", "40", "45"],
+          correct: 1
+        },
+        {
+          question: "√16 等于多少？",
+          options: ["2", "3", "4", "5"],
+          correct: 2
+        }
+      ],
+      general: [
+        {
+          question: "中国的首都是哪里？",
+          options: ["上海", "北京", "广州", "深圳"],
+          correct: 1
+        },
+        {
+          question: "一年有多少天？",
+          options: ["364", "365", "366", "367"],
+          correct: 1
+        }
+      ]
+    };
+
+    let currentQuiz = localStorage.getItem('currentQuiz') || 'math';
+    let questions = quizData[currentQuiz] || quizData.math;
+    let currentQuestionIndex = 0;
+    let score = 0;
+    let selectedAnswer = null;
+    let timeLeft = 30;
+    let timerInterval;
+
+    function loadQuestion() {
+      const question = questions[currentQuestionIndex];
+      document.getElementById('questionText').textContent = question.question;
+      document.getElementById('currentQuestion').textContent = currentQuestionIndex + 1;
+      document.getElementById('totalQuestions').textContent = questions.length;
+      
+      const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
+      document.getElementById('progressFill').style.width = progress + '%';
+
+      const optionsContainer = document.getElementById('optionsContainer');
+      optionsContainer.innerHTML = '';
+      
+      question.options.forEach((option, index) => {
+        const optionDiv = document.createElement('div');
+        optionDiv.className = 'option-card rounded-xl p-4 cursor-pointer';
+        optionDiv.onclick = () => selectOption(index);
+        optionDiv.innerHTML = `<span class="text-white">${String.fromCharCode(65 + index)}. ${option}</span>`;
+        optionsContainer.appendChild(optionDiv);
+      });
+
+      resetTimer();
+    }
+
+    function selectOption(index) {
+      if (selectedAnswer !== null) return;
+      
+      selectedAnswer = index;
+      const options = document.querySelectorAll('.option-card');
+      const question = questions[currentQuestionIndex];
+      
+      options[index].classList.add('selected');
+      
+      if (index === question.correct) {
+        options[index].classList.add('correct');
+        score++;
+      } else {
+        options[index].classList.add('incorrect');
+        options[question.correct].classList.add('correct');
+      }
+
+      clearInterval(timerInterval);
+      
+      const nextBtn = document.getElementById('nextBtn');
+      nextBtn.textContent = currentQuestionIndex === questions.length - 1 ? '查看结果' : '下一题';
+      nextBtn.className = 'w-full mt-8 bg-blue-600 text-white rounded-xl py-4 font-semibold transition';
+      nextBtn.disabled = false;
+      nextBtn.onclick = nextQuestion;
+    }
+
+    function resetTimer() {
+      timeLeft = 30;
+      updateTimer();
+      clearInterval(timerInterval);
+      timerInterval = setInterval(() => {
+        timeLeft--;
+        updateTimer();
+        if (timeLeft <= 0) {
+          clearInterval(timerInterval);
+          selectOption(-1); // Auto-submit
+        }
+      }, 1000);
+    }
+
+    function updateTimer() {
+      const minutes = Math.floor(timeLeft / 60);
+      const seconds = timeLeft % 60;
+      document.getElementById('timer').textContent = 
+        `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    }
+
+    function nextQuestion() {
+      currentQuestionIndex++;
+      selectedAnswer = null;
+      
+      if (currentQuestionIndex >= questions.length) {
+        localStorage.setItem('quizResult', JSON.stringify({
+          score: score,
+          total: questions.length,
+          quizType: currentQuiz
+        }));
+        window.location.href = 'result.html';
+      } else {
+        loadQuestion();
+        document.getElementById('nextBtn').textContent = '请选择答案';
+        document.getElementById('nextBtn').className = 'w-full mt-8 bg-gray-700 text-gray-400 rounded-xl py-4 font-semibold transition';
+        document.getElementById('nextBtn').disabled = true;
+      }
+    }
+
+    // Initialize
+    loadQuestion();
+  </script>
+</body>
+</html>

@@ -1,0 +1,411 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>历史记录 - 对话与测验</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background-color: #f5f5f7;
+    }
+    .ios-card {
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    .date-divider {
+      background: linear-gradient(90deg, transparent, #e5e7eb, transparent);
+    }
+    .loading-shimmer {
+      background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+    }
+    @keyframes shimmer {
+      0% { background-position: -200% 0; }
+      100% { background-position: 200% 0; }
+    }
+    .fade-in {
+      animation: fadeIn 0.3s ease-in;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body class="bg-gray-50">
+  <!-- 顶部导航栏 -->
+  <header class="ios-card fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-200">
+    <div class="max-w-2xl mx-auto px-4 py-3 flex items-center justify-between">
+      <button class="text-blue-600 font-medium">
+        <i class="fas fa-chevron-left mr-1"></i>返回
+      </button>
+      <h1 class="text-lg font-semibold text-gray-900">历史记录</h1>
+      <button class="text-blue-600">
+        <i class="fas fa-filter"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- 筛选栏 -->
+  <div class="fixed top-14 left-0 right-0 z-40 bg-white border-b border-gray-200">
+    <div class="max-w-2xl mx-auto px-4 py-3">
+      <div class="flex items-center space-x-4">
+        <!-- 类型切换 -->
+        <div class="flex bg-gray-100 rounded-full p-1">
+          <button id="tab-conversations" class="tab-btn px-4 py-2 rounded-full text-sm font-medium transition-all active">
+            对话
+          </button>
+          <button id="tab-quizzes" class="tab-btn px-4 py-2 rounded-full text-sm font-medium transition-all">
+            测验
+          </button>
+        </div>
+        
+        <!-- 时间筛选 -->
+        <select id="timeFilter" class="text-sm border-none bg-transparent text-gray-700">
+          <option value="all">全部时间</option>
+          <option value="today">今天</option>
+          <option value="week">本周</option>
+          <option value="month">本月</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- 主内容区 -->
+  <main class="pt-28 pb-20 max-w-2xl mx-auto px-4">
+    <!-- 加载状态 -->
+    <div id="loadingState" class="hidden py-8">
+      <div class="space-y-4">
+        <div class="loading-shimmer h-4 w-32 rounded"></div>
+        <div class="ios-card rounded-2xl p-4 space-y-3">
+          <div class="loading-shimmer h-5 w-3/4 rounded"></div>
+          <div class="loading-shimmer h-4 w-full rounded"></div>
+          <div class="loading-shimmer h-4 w-5/6 rounded"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 空状态 -->
+    <div id="emptyState" class="hidden text-center py-20">
+      <div class="w-20 h-20 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center">
+        <i class="fas fa-inbox text-2xl text-gray-400"></i>
+      </div>
+      <h3 class="text-lg font-medium text-gray-900 mb-2">暂无记录</h3>
+      <p class="text-gray-500 mb-4">开始您的第一次对话或测验吧</p>
+      <button class="bg-blue-600 text-white px-6 py-2 rounded-full text-sm font-medium">
+        立即开始
+      </button>
+    </div>
+
+    <!-- 记录列表 -->
+    <div id="recordsList" class="space-y-6">
+      <!-- 动态内容将在这里插入 -->
+    </div>
+
+    <!-- 加载更多 -->
+    <div id="loadMore" class="text-center py-4 hidden">
+      <button class="text-blue-600 text-sm font-medium">
+        <i class="fas fa-spinner fa-spin mr-2"></i>加载更多...
+      </button>
+    </div>
+  </main>
+
+  <!-- 底部导航 -->
+  <nav class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200">
+    <div class="max-w-2xl mx-auto px-4 py-2 flex justify-around">
+      <button class="flex flex-col items-center py-2 text-gray-400">
+        <i class="fas fa-home text-xl"></i>
+        <span class="text-xs mt-1">首页</span>
+      </button>
+      <button class="flex flex-col items-center py-2 text-blue-600">
+        <i class="fas fa-history text-xl"></i>
+        <span class="text-xs mt-1">历史</span>
+      </button>
+      <button class="flex flex-col items-center py-2 text-gray-400">
+        <i class="fas fa-user text-xl"></i>
+        <span class="text-xs mt-1">我的</span>
+      </button>
+    </div>
+  </nav>
+
+  <script>
+    // 模拟数据模型
+    const mockData = {
+      conversations: [
+        {
+          id: 1,
+          title: "关于人工智能的讨论",
+          lastMessage: "我认为AI将在未来10年内彻底改变我们的工作方式...",
+          timestamp: new Date('2025-07-23T10:30:00'),
+          messageCount: 12,
+          avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&h=100&fit=crop"
+        },
+        {
+          id: 2,
+          title: "产品设计头脑风暴",
+          lastMessage: "用户反馈显示我们需要优化注册流程...",
+          timestamp: new Date('2025-07-22T15:45:00'),
+          messageCount: 8,
+          avatar: "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=100&h=100&fit=crop"
+        },
+        {
+          id: 3,
+          title: "技术架构咨询",
+          lastMessage: "微服务架构确实更适合当前的业务规模...",
+          timestamp: new Date('2025-07-21T09:20:00'),
+          messageCount: 25,
+          avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop"
+        }
+      ],
+      quizzes: [
+        {
+          id: 101,
+          title: "JavaScript高级特性测试",
+          score: 85,
+          totalQuestions: 20,
+          correctAnswers: 17,
+          duration: 15,
+          timestamp: new Date('2025-07-23T14:00:00')
+        },
+        {
+          id: 102,
+          title: "React Hooks实战测验",
+          score: 92,
+          totalQuestions: 15,
+          correctAnswers: 14,
+          duration: 12,
+          timestamp: new Date('2025-07-22T11:30:00')
+        },
+        {
+          id: 103,
+          title: "CSS Grid布局挑战",
+          score: 78,
+          totalQuestions: 10,
+          correctAnswers: 8,
+          duration: 8,
+          timestamp: new Date('2025-07-20T16:45:00')
+        }
+      ]
+    };
+
+    let currentType = 'conversations';
+    let currentFilter = 'all';
+    let currentPage = 1;
+    const itemsPerPage = 10;
+
+    // 格式化时间
+    function formatTime(date) {
+      const now = new Date();
+      const diff = now - date;
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      
+      if (days === 0) return '今天';
+      if (days === 1) return '昨天';
+      if (days < 7) return `${days}天前`;
+      return date.toLocaleDateString('zh-CN', { month: 'short', day: 'numeric' });
+    }
+
+    // 格式化日期分组
+    function formatDateGroup(date) {
+      const today = new Date();
+      const yesterday = new Date(today);
+      yesterday.setDate(yesterday.getDate() - 1);
+      
+      if (date.toDateString() === today.toDateString()) return '今天';
+      if (date.toDateString() === yesterday.toDateString()) return '昨天';
+      return date.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' });
+    }
+
+    // 筛选数据
+    function filterData(data, filter) {
+      const now = new Date();
+      let filtered = [...data];
+      
+      switch(filter) {
+        case 'today':
+          filtered = filtered.filter(item => 
+            item.timestamp.toDateString() === now.toDateString()
+          );
+          break;
+        case 'week':
+          const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+          filtered = filtered.filter(item => item.timestamp >= weekAgo);
+          break;
+        case 'month':
+          const monthAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+          filtered = filtered.filter(item => item.timestamp >= monthAgo);
+          break;
+      }
+      
+      return filtered.sort((a, b) => b.timestamp - a.timestamp);
+    }
+
+    // 分页数据
+    function paginateData(data, page) {
+      const start = (page - 1) * itemsPerPage;
+      const end = start + itemsPerPage;
+      return data.slice(0, end);
+    }
+
+    // 渲染对话卡片
+    function renderConversationCard(item) {
+      return `
+        <div class="ios-card rounded-2xl p-4 fade-in">
+          <div class="flex items-start space-x-3">
+            <img src="${item.avatar}" alt="avatar" class="w-12 h-12 rounded-full">
+            <div class="flex-1 min-w-0">
+              <h3 class="font-semibold text-gray-900 truncate">${item.title}</h3>
+              <p class="text-sm text-gray-600 mt-1 line-clamp-2">${item.lastMessage}</p>
+              <div class="flex items-center justify-between mt-2">
+                <span class="text-xs text-gray-500">${formatTime(item.timestamp)}</span>
+                <span class="text-xs text-gray-500">${item.messageCount}条消息</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // 渲染测验卡片
+    function renderQuizCard(item) {
+      const scoreColor = item.score >= 80 ? 'text-green-600' : 
+                        item.score >= 60 ? 'text-yellow-600' : 'text-red-600';
+      
+      return `
+        <div class="ios-card rounded-2xl p-4 fade-in">
+          <div class="flex items-center justify-between">
+            <div class="flex-1">
+              <h3 class="font-semibold text-gray-900">${item.title}</h3>
+              <div class="flex items-center space-x-4 mt-2 text-sm text-gray-600">
+                <span>${item.correctAnswers}/${item.totalQuestions}题</span>
+                <span>${item.duration}分钟</span>
+              </div>
+            </div>
+            <div class="text-right">
+              <div class="text-2xl font-bold ${scoreColor}">${item.score}分</div>
+              <div class="text-xs text-gray-500">${formatTime(item.timestamp)}</div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // 按日期分组渲染
+    function renderRecords(data) {
+      const recordsList = document.getElementById('recordsList');
+      recordsList.innerHTML = '';
+      
+      if (data.length === 0) {
+        document.getElementById('emptyState').classList.remove('hidden');
+        return;
+      }
+      
+      document.getElementById('emptyState').classList.add('hidden');
+      
+      // 按日期分组
+      const grouped = {};
+      data.forEach(item => {
+        const dateKey = formatDateGroup(item.timestamp);
+        if (!grouped[dateKey]) grouped[dateKey] = [];
+        grouped[dateKey].push(item);
+      });
+      
+      // 渲染分组
+      Object.entries(grouped).forEach(([date, items]) => {
+        const groupDiv = document.createElement('div');
+        groupDiv.className = 'space-y-3';
+        groupDiv.innerHTML = `
+          <div class="flex items-center space-x-3">
+            <div class="date-divider flex-1 h-px"></div>
+            <span class="text-sm font-medium text-gray-500 px-2">${date}</span>
+            <div class="date-divider flex-1 h-px"></div>
+          </div>
+          <div class="space-y-3">
+            ${items.map(item => 
+              currentType === 'conversations' ? 
+              renderConversationCard(item) : 
+              renderQuizCard(item)
+            ).join('')}
+          </div>
+        `;
+        recordsList.appendChild(groupDiv);
+      });
+    }
+
+    // 加载数据
+    function loadData() {
+      const data = currentType === 'conversations' ? 
+                   mockData.conversations : 
+                   mockData.quizzes;
+      
+      const filtered = filterData(data, currentFilter);
+      const paginated = paginateData(filtered, currentPage);
+      
+      renderRecords(paginated);
+      
+      // 检查是否还有更多数据
+      const hasMore = paginated.length < filtered.length;
+      document.getElementById('loadMore').classList.toggle('hidden', !hasMore);
+    }
+
+    // 事件监听
+    document.getElementById('tab-conversations').addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('bg-blue-600', 'text-white'));
+      document.getElementById('tab-conversations').classList.add('bg-blue-600', 'text-white');
+      currentType = 'conversations';
+      currentPage = 1;
+      loadData();
+    });
+
+    document.getElementById('tab-quizzes').addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('bg-blue-600', 'text-white'));
+      document.getElementById('tab-quizzes').classList.add('bg-blue-600', 'text-white');
+      currentType = 'quizzes';
+      currentPage = 1;
+      loadData();
+    });
+
+    document.getElementById('timeFilter').addEventListener('change', (e) => {
+      currentFilter = e.target.value;
+      currentPage = 1;
+      loadData();
+    });
+
+    document.getElementById('loadMore').addEventListener('click', () => {
+      currentPage++;
+      loadData();
+    });
+
+    // 初始化
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('tab-conversations').classList.add('bg-blue-600', 'text-white');
+      loadData();
+    });
+
+    // 无限滚动
+    let isLoading = false;
+    window.addEventListener('scroll', () => {
+      if (isLoading) return;
+      
+      const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
+      if (scrollTop + clientHeight >= scrollHeight - 100) {
+        const loadMoreBtn = document.getElementById('loadMore');
+        if (!loadMoreBtn.classList.contains('hidden')) {
+          isLoading = true;
+          currentPage++;
+          setTimeout(() => {
+            loadData();
+            isLoading = false;
+          }, 500);
+        }
+      }
+    });
+  </script>
+</body>
+</html>

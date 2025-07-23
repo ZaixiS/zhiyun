@@ -1,0 +1,124 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>测验选择 - QuizMaster</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: #000000;
+    }
+    .quiz-card {
+      background: linear-gradient(135deg, #1C1C1E 0%, #2C2C2E 100%);
+      transition: all 0.3s ease;
+    }
+    .quiz-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 25px rgba(0, 132, 255, 0.3);
+    }
+    .gradient-text {
+      background: linear-gradient(135deg, #0A84FF, #5E5CE6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-black">
+  <div class="max-w-md mx-auto px-4 py-8">
+    <!-- Header -->
+    <header class="mb-8">
+      <h1 class="text-3xl font-bold text-white mb-2">选择测验</h1>
+      <p class="text-gray-400">挑战你的知识储备</p>
+    </header>
+
+    <!-- Quiz Categories -->
+    <div class="space-y-4">
+      <!-- Math Quiz -->
+      <div class="quiz-card rounded-2xl p-6 cursor-pointer" onclick="startQuiz('math')">
+        <div class="flex items-center space-x-4">
+          <div class="w-16 h-16 rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+            <i class="fas fa-calculator text-white text-2xl"></i>
+          </div>
+          <div class="flex-1">
+            <h3 class="text-xl font-semibold text-white mb-1">数学测验</h3>
+            <p class="text-gray-400 text-sm">10道题目 · 中等难度</p>
+          </div>
+          <i class="fas fa-chevron-right text-gray-400"></i>
+        </div>
+      </div>
+
+      <!-- General Knowledge -->
+      <div class="quiz-card rounded-2xl p-6 cursor-pointer" onclick="startQuiz('general')">
+        <div class="flex items-center space-x-4">
+          <div class="w-16 h-16 rounded-xl bg-gradient-to-br from-green-500 to-teal-600 flex items-center justify-center">
+            <i class="fas fa-globe text-white text-2xl"></i>
+          </div>
+          <div class="flex-1">
+            <h3 class="text-xl font-semibold text-white mb-1">常识测验</h3>
+            <p class="text-gray-400 text-sm">15道题目 · 简单难度</p>
+          </div>
+          <i class="fas fa-chevron-right text-gray-400"></i>
+        </div>
+      </div>
+
+      <!-- Science Quiz -->
+      <div class="quiz-card rounded-2xl p-6 cursor-pointer" onclick="startQuiz('science')">
+        <div class="flex items-center space-x-4">
+          <div class="w-16 h-16 rounded-xl bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center">
+            <i class="fas fa-flask text-white text-2xl"></i>
+          </div>
+          <div class="flex-1">
+            <h3 class="text-xl font-semibold text-white mb-1">科技测验</h3>
+            <p class="text-gray-400 text-sm">12道题目 · 困难难度</p>
+          </div>
+          <i class="fas fa-chevron-right text-gray-400"></i>
+        </div>
+      </div>
+
+      <!-- History Quiz -->
+      <div class="quiz-card rounded-2xl p-6 cursor-pointer" onclick="startQuiz('history')">
+        <div class="flex items-center space-x-4">
+          <div class="w-16 h-16 rounded-xl bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center">
+            <i class="fas fa-scroll text-white text-2xl"></i>
+          </div>
+          <div class="flex-1">
+            <h3 class="text-xl font-semibold text-white mb-1">历史测验</h3>
+            <p class="text-gray-400 text-sm">8道题目 · 中等难度</p>
+          </div>
+          <i class="fas fa-chevron-right text-gray-400"></i>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stats Section -->
+    <div class="mt-8 bg-gray-900 rounded-2xl p-6">
+      <h3 class="text-lg font-semibold text-white mb-4">学习统计</h3>
+      <div class="grid grid-cols-3 gap-4 text-center">
+        <div>
+          <p class="text-2xl font-bold gradient-text">24</p>
+          <p class="text-gray-400 text-sm">已完成</p>
+        </div>
+        <div>
+          <p class="text-2xl font-bold gradient-text">87%</p>
+          <p class="text-gray-400 text-sm">平均正确率</p>
+        </div>
+        <div>
+          <p class="text-2xl font-bold gradient-text">5</p>
+          <p class="text-gray-400 text-sm">连续天数</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function startQuiz(type) {
+      localStorage.setItem('currentQuiz', type);
+      window.location.href = 'quiz.html';
+    }
+  </script>
+</body>
+</html>

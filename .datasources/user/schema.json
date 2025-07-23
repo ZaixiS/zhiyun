@@ -1,0 +1,33 @@
+
+{
+  "name": "user",
+  "title": "用户",
+  "schemas": [
+    {
+      "name": "username",
+      "title": "用户名",
+      "type": "String"
+    },
+    {
+      "name": "password",
+      "title": "密码",
+      "type": "String"
+    },
+    {
+      "name": "role",
+      "title": "角色",
+      "type": "String"
+    },
+    {
+      "name": "email",
+      "title": "邮箱",
+      "type": "Email"
+    },
+    {
+      "name": "avatar",
+      "title": "头像",
+      "type": "Image"
+    }
+  ]
+}
+  

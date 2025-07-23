@@ -1,0 +1,156 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>测验结果 - QuizMaster</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: #000000;
+    }
+    .score-circle {
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      background: conic-gradient(#0A84FF 0deg, #0A84FF var(--score-deg), #2C2C2E var(--score-deg));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    .score-circle::before {
+      content: '';
+      position: absolute;
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      background: #000000;
+    }
+    .score-text {
+      position: relative;
+      z-index: 1;
+    }
+    .achievement-badge {
+      background: linear-gradient(135deg, #FFD60A, #FF9F0A);
+      color: #000000;
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-black">
+  <div class="max-w-md mx-auto px-4 py-8">
+    <!-- Header -->
+    <header class="text-center mb-8">
+      <h1 class="text-3xl font-bold text-white mb-2">测验完成！</h1>
+      <p class="text-gray-400">来看看你的表现</p>
+    </header>
+
+    <!-- Score Display -->
+    <div class="flex justify-center mb-8">
+      <div class="score-circle" id="scoreCircle">
+        <div class="score-text text-center">
+          <p class="text-4xl font-bold text-white" id="scoreDisplay">0</p>
+          <p class="text-gray-400 text-sm">分</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="grid grid-cols-2 gap-4 mb-8">
+      <div class="bg-gray-900 rounded-2xl p-4 text-center">
+        <i class="fas fa-check-circle text-green-500 text-2xl mb-2"></i>
+        <p class="text-2xl font-bold text-white" id="correctCount">0</p>
+        <p class="text-gray-400 text-sm">正确</p>
+      </div>
+      <div class="bg-gray-900 rounded-2xl p-4 text-center">
+        <i class="fas fa-times-circle text-red-500 text-2xl mb-2"></i>
+        <p class="text-2xl font-bold text-white" id="incorrectCount">0</p>
+        <p class="text-gray-400 text-sm">错误</p>
+      </div>
+    </div>
+
+    <!-- Achievement -->
+    <div class="achievement-badge rounded-2xl p-4 mb-8 text-center">
+      <i class="fas fa-trophy text-2xl mb-2"></i>
+      <p class="font-bold" id="achievementText">知识达人</p>
+    </div>
+
+    <!-- Actions -->
+    <div class="space-y-3">
+      <button onclick="restartQuiz()" class="w-full bg-blue-600 text-white rounded-xl py-4 font-semibold transition hover:bg-blue-700">
+        <i class="fas fa-redo mr-2"></i>
+        重新测验
+      </button>
+      <button onclick="window.location.href='index.html'" class="w-full bg-gray-800 text-white rounded-xl py-4 font-semibold transition hover:bg-gray-700">
+        <i class="fas fa-home mr-2"></i>
+        返回首页
+      </button>
+    </div>
+
+    <!-- Share Section -->
+    <div class="mt-8 text-center">
+      <p class="text-gray-400 mb-4">分享你的成绩</p>
+      <div class="flex justify-center space-x-4">
+        <button class="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center">
+          <i class="fab fa-weixin text-white"></i>
+        </button>
+        <button class="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center">
+          <i class="fab fa-twitter text-white"></i>
+        </button>
+        <button class="w-12 h-12 bg-pink-600 rounded-full flex items-center justify-center">
+          <i class="fab fa-instagram text-white"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Load results
+    const result = JSON.parse(localStorage.getItem('quizResult') || '{"score":0,"total":10,"quizType":"math"}');
+    const score = result.score;
+    const total = result.total;
+    const percentage = Math.round((score / total) * 100);
+
+    // Animate score
+    let currentScore = 0;
+    const scoreElement = document.getElementById('scoreDisplay');
+    const scoreCircle = document.getElementById('scoreCircle');
+    const increment = Math.ceil(score / 50);
+    
+    const scoreAnimation = setInterval(() => {
+      currentScore += increment;
+      if (currentScore >= score) {
+        currentScore = score;
+        clearInterval(scoreAnimation);
+      }
+      scoreElement.textContent = currentScore;
+      const degrees = (currentScore / total) * 360;
+      scoreCircle.style.setProperty('--score-deg', degrees + 'deg');
+    }, 20);
+
+    // Update stats
+    document.getElementById('correctCount').textContent = score;
+    document.getElementById('incorrectCount').textContent = total - score;
+
+    // Achievement
+    let achievement = '';
+    if (percentage >= 90) {
+      achievement = '知识大师';
+    } else if (percentage >= 70) {
+      achievement = '知识达人';
+    } else if (percentage >= 50) {
+      achievement = '学习新秀';
+    } else {
+      achievement = '继续努力';
+    }
+    document.getElementById('achievementText').textContent = achievement;
+
+    function restartQuiz() {
+      window.location.href = 'quiz.html';
+    }
+  </script>
+</body>
+</html>

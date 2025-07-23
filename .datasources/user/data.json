@@ -1,0 +1,54 @@
+
+[
+  {
+    "_id": "user_001",
+    "username": "admin",
+    "password": "admin123",
+    "role": "admin",
+    "email": "admin@example.com",
+    "avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face",
+    "createdAt": 1721721600000,
+    "updatedAt": 1721721600000
+  },
+  {
+    "_id": "user_002",
+    "username": "alice",
+    "password": "alice123",
+    "role": "user",
+    "email": "alice@example.com",
+    "avatar": "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=100&h=100&fit=crop&crop=face",
+    "createdAt": 1721808000000,
+    "updatedAt": 1721808000000
+  },
+  {
+    "_id": "user_003",
+    "username": "bob",
+    "password": "bob123",
+    "role": "user",
+    "email": "bob@example.com",
+    "avatar": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop&crop=face",
+    "createdAt": 1721894400000,
+    "updatedAt": 1721894400000
+  },
+  {
+    "_id": "user_004",
+    "username": "charlie",
+    "password": "charlie123",
+    "role": "user",
+    "email": "charlie@example.com",
+    "avatar": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face",
+    "createdAt": 1721980800000,
+    "updatedAt": 1721980800000
+  },
+  {
+    "_id": "user_005",
+    "username": "diana",
+    "password": "diana123",
+    "role": "user",
+    "email": "diana@example.com",
+    "avatar": "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop&crop=face",
+    "createdAt": 1722067200000,
+    "updatedAt": 1722067200000
+  }
+]
+  

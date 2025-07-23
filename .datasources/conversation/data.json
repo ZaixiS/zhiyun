@@ -1,0 +1,124 @@
+
+[
+  {
+    "_id": "conv_001",
+    "userId": "user_002",
+    "title": "数学计算对话",
+    "lastMessage": "计算结果：25×36+48 = 948",
+    "messages": [
+      {
+        "id": 1721721600000,
+        "role": "user",
+        "content": "计算 25×36+48",
+        "timestamp": "2024-07-23T08:00:00.000Z",
+        "messageType": "text"
+      },
+      {
+        "id": 1721721601000,
+        "role": "bot",
+        "content": "计算结果：25×36+48 = 948",
+        "timestamp": "2024-07-23T08:00:01.000Z",
+        "messageType": "calculation"
+      }
+    ],
+    "createdAt": 1721721600000,
+    "updatedAt": 1721721601000
+  },
+  {
+    "_id": "conv_002",
+    "userId": "user_002",
+    "title": "数学题挑战",
+    "lastMessage": "一个长方形的长是8cm，宽是5cm，面积是多少平方厘米？答案是40cm²。",
+    "messages": [
+      {
+        "id": 1721808000000,
+        "role": "user",
+        "content": "给我出一道数学题",
+        "timestamp": "2024-07-24T08:00:00.000Z",
+        "messageType": "text"
+      },
+      {
+        "id": 1721808001000,
+        "role": "bot",
+        "content": "一个长方形的长是8cm，宽是5cm，面积是多少平方厘米？答案是40cm²。",
+        "timestamp": "2024-07-24T08:00:01.000Z",
+        "messageType": "question"
+      }
+    ],
+    "createdAt": 1721808000000,
+    "updatedAt": 1721808001000
+  },
+  {
+    "_id": "conv_003",
+    "userId": "user_003",
+    "title": "笑话时间",
+    "lastMessage": "为什么程序员喜欢用暗黑模式？因为光吸引bug。",
+    "messages": [
+      {
+        "id": 1721894400000,
+        "role": "user",
+        "content": "讲个笑话",
+        "timestamp": "2024-07-25T08:00:00.000Z",
+        "messageType": "text"
+      },
+      {
+        "id": 1721894401000,
+        "role": "bot",
+        "content": "为什么程序员喜欢用暗黑模式？因为光吸引bug。",
+        "timestamp": "2024-07-25T08:00:01.000Z",
+        "messageType": "joke"
+      }
+    ],
+    "createdAt": 1721894400000,
+    "updatedAt": 1721894401000
+  },
+  {
+    "_id": "conv_004",
+    "userId": "user_004",
+    "title": "选择题游戏邀请",
+    "lastMessage": "好的！让我们开始选择题挑战。我会为你生成有趣的数学题，准备好了吗？",
+    "messages": [
+      {
+        "id": 1721980800000,
+        "role": "user",
+        "content": "选择题",
+        "timestamp": "2024-07-26T08:00:00.000Z",
+        "messageType": "text"
+      },
+      {
+        "id": 1721980801000,
+        "role": "bot",
+        "content": "好的！让我们开始选择题挑战。我会为你生成有趣的数学题，准备好了吗？",
+        "timestamp": "2024-07-26T08:00:01.000Z",
+        "messageType": "quiz-invite"
+      }
+    ],
+    "createdAt": 1721980800000,
+    "updatedAt": 1721980801000
+  },
+  {
+    "_id": "conv_005",
+    "userId": "user_005",
+    "title": "日常问候",
+    "lastMessage": "我理解你的意思了。作为一个AI助手，我可以帮助你解答各种问题，进行数学计算，或者一起玩互动游戏。你想聊些什么？",
+    "messages": [
+      {
+        "id": 1722067200000,
+        "role": "user",
+        "content": "你好，今天天气怎么样？",
+        "timestamp": "2024-07-27T08:00:00.000Z",
+        "messageType": "text"
+      },
+      {
+        "id": 1722067201000,
+        "role": "bot",
+        "content": "我理解你的意思了。作为一个AI助手，我可以帮助你解答各种问题，进行数学计算，或者一起玩互动游戏。你想聊些什么？",
+        "timestamp": "2024-07-27T08:00:01.000Z",
+        "messageType": "text"
+      }
+    ],
+    "createdAt": 1722067200000,
+    "updatedAt": 1722067201000
+  }
+]
+  

@@ -1,0 +1,31 @@
+
+{
+  "name": "conversation",
+  "title": "对话记录",
+  "schemas": [
+    {
+      "name": "userId",
+      "title": "用户ID",
+      "type": "String"
+    },
+    {
+      "name": "messages",
+      "title": "消息列表",
+      "type": "Array",
+      "items": {
+        "type": "Object"
+      }
+    },
+    {
+      "name": "title",
+      "title": "对话标题",
+      "type": "String"
+    },
+    {
+      "name": "lastMessage",
+      "title": "最后消息",
+      "type": "String"
+    }
+  ]
+}
+  
