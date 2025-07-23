@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 // @ts-ignore;
 import { Button, Input, Card, CardHeader, CardTitle, CardContent } from '@/components/ui';
 // @ts-ignore;
-import { Send, Bot, User, Calculator, BookOpen, History, Menu, X, Sparkles, MessageCircle, Loader2 } from 'lucide-react';
+import { Send, Bot, User, History, Menu, X, Sparkles, MessageCircle, Loader2 } from 'lucide-react';
 
 export default function ChatPage(props) {
   const {
@@ -243,14 +243,6 @@ export default function ChatPage(props) {
       return '抱歉，我暂时无法连接到AI服务。请稍后再试。';
     }
   };
-  const startQuiz = () => {
-    $w.utils.navigateTo({
-      pageId: 'quiz',
-      params: {
-        username: username
-      }
-    });
-  };
   const viewHistory = () => {
     $w.utils.navigateTo({
       pageId: 'history',
@@ -322,10 +314,6 @@ export default function ChatPage(props) {
           </div>
           
           <div className="flex items-center space-x-2">
-            <Button variant="ghost" size="sm" onClick={startQuiz} className="text-slate-300 hover:text-white">
-              <BookOpen className="w-4 h-4 mr-1" />
-              答题
-            </Button>
             <Button variant="ghost" size="sm" onClick={viewHistory} className="text-slate-300 hover:text-white">
               <History className="w-4 h-4 mr-1" />
               历史
@@ -341,14 +329,10 @@ export default function ChatPage(props) {
               <p className="text-sm text-center max-w-md">
                 我是基于DeepSeek的智能助手，可以为您提供更智能、更自然的对话体验。
               </p>
-              <div className="mt-6 grid grid-cols-2 gap-3">
+              <div className="mt-6">
                 <Button onClick={() => setInputMessage('你好，请介绍一下自己')} variant="outline" className="text-slate-300 border-slate-600 hover:bg-slate-700">
                   <Sparkles className="w-4 h-4 mr-2" />
                   开始对话
-                </Button>
-                <Button onClick={startQuiz} variant="outline" className="text-slate-300 border-slate-600 hover:bg-slate-700">
-                  <BookOpen className="w-4 h-4 mr-2" />
-                  开始答题
                 </Button>
               </div>
             </div> : messages.map(message => <div key={message.id} className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}>
